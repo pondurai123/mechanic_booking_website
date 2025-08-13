@@ -84,7 +84,7 @@
                                     
                                     <form method="POST" action="{{ route('admin.booking.approve', $booking->id) }}" style="display: inline;">
                                         @csrf
-                                        <button type="submit" class="btn btn-success" onclick="return confirm('Approve this booking?')" title="Approve Booking">
+                                        <button class="btn btn-success" onclick="showApproveModal({{ $booking->id }})" title="Approve Booking">
                                             <i class="fas fa-check"></i> Approve
                                         </button>
                                     </form>
@@ -212,6 +212,39 @@
         </div>
     </div>
 </div>
+<!-- Approve Booking Modal -->
+<div id="approveModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000;">
+    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; border-radius: 15px; width: 90%; max-width: 500px; max-height: 90%; overflow-y: auto;">
+        <div style="padding: 20px; border-bottom: 1px solid #eee;">
+            <h3 style="margin: 0; color: #333;">
+                <i class="fas fa-check-circle"></i> Approve Booking
+            </h3>
+            <button onclick="closeApproveModal()" style="position: absolute; right: 15px; top: 15px; background: none; border: none; font-size: 1.5rem; cursor: pointer;">&times;</button>
+        </div>
+        <div id="approveModalContent" style="padding: 20px;">
+            <form id="approveForm" method="POST">
+                @csrf
+                <div class="form-group">
+                    <label for="mechanic_id">Assign Mechanic</label>
+                    <select name="mechanic_id" id="mechanic_id" class="form-control" required>
+                        <option value="">Select Mechanic</option>
+                        @foreach(App\Models\Mechanic::active()->get() as $mechanic)
+                            <option value="{{ $mechanic->id }}">{{ $mechanic->name }} ({{ $mechanic->phone }})</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div style="text-align: center; margin-top: 20px;">
+                    <button type="submit" class="btn btn-success">
+                        <i class="fas fa-check"></i> Approve Booking
+                    </button>
+                    <button type="button" class="btn btn-secondary" onclick="closeApproveModal()" style="margin-left: 10px;">
+                        <i class="fas fa-times"></i> Cancel
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 @endif
 
 <script>
@@ -305,5 +338,18 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+let currentBookingId = null;
+
+function showApproveModal(bookingId) {
+    currentBookingId = bookingId;
+    document.getElementById('approveForm').action = `/admin/bookings/${bookingId}/approve`;
+    document.getElementById('approveModal').style.display = 'block';
+}
+
+function closeApproveModal() {
+    document.getElementById('approveModal').style.display = 'none';
+    currentBookingId = null;
+}
+
 </script>
 @endsection

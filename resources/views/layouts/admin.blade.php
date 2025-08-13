@@ -488,6 +488,11 @@
                     <i class="fas fa-times-circle"></i> Cancelled Orders
                 </a>
             </li>
+             <li class="nav-item">
+                <a href="{{ route('admin.mechanics.index') }}" class="nav-link {{ request()->routeIs('admin.cancelled') ? 'active' : '' }}">
+                    <i class="fas fa-times-circle"></i> Mechanic
+                </a>
+            </li>
             <li class="nav-item">
                 <a href="{{ route('admin.settings') }}" class="nav-link {{ request()->routeIs('admin.settings') ? 'active' : '' }}">
                     <i class="fas fa-cog"></i> Settings

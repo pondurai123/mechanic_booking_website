@@ -42,21 +42,28 @@ class BookingController extends Controller
         ]);
     }
 
-    public function approve($id)
+    public function approve(Request $request, $id)
     {
+        $request->validate([
+            'mechanic_id' => 'required|exists:mechanics,id'
+        ]);
+
         $booking = Booking::findOrFail($id);
-        $booking->update(['status' => 'approved']);
+        $mechanic = Mechanic::findOrFail($request->mechanic_id);
+
+        $booking->update([
+            'status' => 'approved',
+            'mechanic_id' => $mechanic->id
+        ]);
 
         // Send approval email to customer
-        $adminContact = Setting::get('admin_contact', '+91 98765 43210');
         try {
-            Mail::to($booking->email)->send(new BookingApproved($booking, $adminContact));
+            Mail::to($booking->email)->send(new BookingApproved($booking, $mechanic));
         } catch (\Exception $e) {
-            // Log error but don't fail the approval
             \Log::error('Failed to send booking approval email: ' . $e->getMessage());
         }
 
-        return back()->with('success', 'Booking approved and customer notified!');
+        return back()->with('success', 'Booking approved and mechanic assigned!');
     }
 
     public function updateStatus(Request $request, $id)

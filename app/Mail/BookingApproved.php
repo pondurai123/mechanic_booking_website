@@ -19,14 +19,13 @@ class BookingApproved extends Mailable
         $this->booking = $booking;
         $this->adminContact = $adminContact;
     }
-
     public function build()
     {
         return $this->subject('Booking Approved - AC Repair Service')
                     ->view('emails.booking-approved')
                     ->with([
                         'booking' => $this->booking,
-                        'adminContact' => $this->adminContact
+                        'mechanic' => $this->mechanic
                     ]);
-    }
+}
 }

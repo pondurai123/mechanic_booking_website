@@ -49,4 +49,10 @@ class Booking extends Model
         return $query->whereMonth('created_at', now()->month)
                     ->whereYear('created_at', now()->year);
     }
+
+    // In app/Models/Booking.php
+    public function mechanic()
+    {
+        return $this->belongsTo(Mechanic::class);
+    }
 }

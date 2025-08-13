@@ -34,10 +34,10 @@
             </div>
             
             <div class="contact-info">
-                <h3>🔧 Our technician will contact you soon!</h3>
-                <p>For any immediate assistance or to reschedule, please contact us:</p>
-                <p><strong>📞 Phone:</strong> {{ $adminContact }}</p>
-                <p><strong>📧 Email:</strong> info@acrepairchennai.com</p>
+                <h3>🔧 Your assigned technician:</h3>
+                <p><strong>Name:</strong> {{ $mechanic->name }}</p>
+                <p><strong>Phone:</strong> {{ $mechanic->phone }}</p>
+                <p>They will contact you shortly to confirm the appointment.</p>
             </div>
             
             <p>Thank you for choosing our AC repair service. We look forward to serving you!</p>
