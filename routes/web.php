@@ -31,7 +31,8 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
     Route::post('/settings', [AdminController::class, 'updateSettings'])->name('admin.settings.update');
     
     // Booking management routes
-    Route::post('/bookings/{id}/approve', [BookingController::class, 'approve'])->name('admin.booking.approve');
+    Route::post('/bookings/{id}/approve', [BookingController::class, 'approve'])
+         ->name('admin.booking.approve');
     Route::post('/bookings/{id}/status', [BookingController::class, 'updateStatus'])->name('admin.booking.status');
     Route::get('/booking/{id}/details', [BookingController::class, 'getDetails'])->name('admin.booking.details');
     

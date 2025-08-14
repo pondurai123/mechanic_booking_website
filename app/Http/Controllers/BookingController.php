@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\BookingConfirmation;
 use App\Mail\BookingApproved;
+use App\Models\Mechanic;
 
 class BookingController extends Controller
 {
@@ -45,7 +46,8 @@ class BookingController extends Controller
     public function approve(Request $request, $id)
     {
         $request->validate([
-            'mechanic_id' => 'required|exists:mechanics,id'
+            'mechanic_id' => 'required|exists:mechanics,id',
+            'status' => 'required|in:approved'
         ]);
 
         $booking = Booking::findOrFail($id);
@@ -63,7 +65,8 @@ class BookingController extends Controller
             \Log::error('Failed to send booking approval email: ' . $e->getMessage());
         }
 
-        return back()->with('success', 'Booking approved and mechanic assigned!');
+        return redirect()->route('admin.pending')
+                        ->with('success', 'Booking approved and mechanic assigned!');
     }
 
     public function updateStatus(Request $request, $id)
