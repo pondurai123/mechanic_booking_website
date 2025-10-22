@@ -5,6 +5,8 @@ use App\Http\Controllers\BookingController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\MechanicController;
+use App\Http\Controllers\Admin\SliderController;
+use App\Http\Controllers\Admin\ServiceController;
 
 // Public routes
 Route::get('/', function () {
@@ -41,7 +43,8 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
     
     // Export functionality
     Route::get('/bookings/export', [BookingController::class, 'export'])->name('admin.booking.export');
-    // Add to the admin routes group
+    
+    // Mechanics routes
     Route::resource('mechanics', MechanicController::class)->names([
         'index' => 'admin.mechanics.index',
         'create' => 'admin.mechanics.create',
@@ -50,4 +53,27 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
         'update' => 'admin.mechanics.update',
         'destroy' => 'admin.mechanics.destroy'
     ]);
+    
+    // Separate Slider Management
+    Route::prefix('sliders')->name('admin.sliders.')->group(function () {
+        Route::get('/', [SliderController::class, 'index'])->name('index');
+        Route::post('/', [SliderController::class, 'store'])->name('store');
+        Route::put('/{id}', [SliderController::class, 'update'])->name('update');
+        Route::delete('/{id}', [SliderController::class, 'destroy'])->name('destroy');
+        Route::post('/reorder', [SliderController::class, 'reorder'])->name('reorder');
+        Route::post('/{id}/toggle', [SliderController::class, 'toggleStatus'])->name('toggle');
+    });
+    
+    // Separate Service Management
+    Route::prefix('services')->name('admin.services.')->group(function () {
+        Route::get('/', [ServiceController::class, 'index'])->name('index');
+        Route::post('/', [ServiceController::class, 'store'])->name('store');
+        Route::put('/{id}', [ServiceController::class, 'update'])->name('update');
+        Route::delete('/{id}', [ServiceController::class, 'destroy'])->name('destroy');
+        Route::post('/reorder', [ServiceController::class, 'reorder'])->name('reorder');
+        Route::post('/{id}/toggle', [ServiceController::class, 'toggleStatus'])->name('toggle');
+    });
+    
+    // Media Upload Route
+    Route::post('/upload-media', [SliderController::class, 'uploadMedia'])->name('admin.upload.media');
 });

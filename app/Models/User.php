@@ -33,4 +33,11 @@ class User extends Authenticatable
     {
         return $this->is_admin;
     }
+    // In Slider model
+    public function getMediaUrlAttribute()
+    {
+        return $this->media_path ? Storage::disk('public')->url($this->media_path) : null;
+    }
+
+
 }
